@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Luna paw icon">
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+  <circle cx="21" cy="22" r="6" fill="#c7d2fe"/>
+  <circle cx="32" cy="17" r="6" fill="#c7d2fe"/>
+  <circle cx="43" cy="22" r="6" fill="#c7d2fe"/>
+  <path d="M18 38c0-8 7-13 14-13s14 5 14 13c0 7-5 12-14 12s-14-5-14-12z" fill="#a5b4fc"/>
+</svg>
