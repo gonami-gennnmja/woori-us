@@ -4,7 +4,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 const DAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-const MONTH_LABELS = ["1?", "2?", "3?", "4?", "5?", "6?", "7?", "8?", "9?", "10?", "11?", "12?"];
+const MONTH_LABELS = [
+  "1?",
+  "2?",
+  "3?",
+  "4?",
+  "5?",
+  "6?",
+  "7?",
+  "8?",
+  "9?",
+  "10?",
+  "11?",
+  "12?",
+];
 
 type ScheduleType = "personal" | "shared";
 type ScheduleRow = {
@@ -78,7 +91,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
   const [time, setTime] = useState("");
   const [type, setType] = useState<ScheduleType>("personal");
   const [isSaving, setIsSaving] = useState(false);
-  const [lunaMessage, setLunaMessage] = useState("??? ?? ??? ??? ????.");
+  const [lunaMessage, setLunaMessage] = useState("??! ?? ?? ??? ?? ????.");
   const [toast, setToast] = useState<ToastState>(null);
   const [copyFeedback, setCopyFeedback] = useState<"idle" | "copied">("idle");
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -130,7 +143,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
         const loaded = (data ?? []) as ScheduleRow[];
         setSchedules(loaded);
         if (loaded.length === 0) {
-          setLunaMessage("?? ????? ?? ?????! ??? ????? ???!");
+          setLunaMessage("?? ??? ???! ? ??? ?? ????.");
         }
       }
       setLoading(false);
@@ -150,16 +163,16 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
     const nowTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
     const overdue = (schedulesByDate[todayKey] ?? []).some((item) => item.time < nowTime);
     if (overdue) {
-      setLunaMessage("?? ??? ? ?? ??? ? ????");
+      setLunaMessage("?? ??? ? ? ??? ???. ??? ???.");
       return;
     }
 
     const sharedCount = schedules.filter((item) => item.type === "shared").length;
     if (sharedCount >= 4) {
       const randomLines = [
-        "?? ???? ???? ??? ?? ?? ?????!",
-        "?? ??? ??. ??? ?? ????.",
-        "?? ?? ? ??? ?? ?? ??? ????.",
+        "?? ?? ??? ?? ?? ?? ????!",
+        "??? ?? ????. ?? ?? ??.",
+        "?? ? ??? ? ???? ? ???.",
       ];
       setLunaMessage(randomLines[Math.floor(Math.random() * randomLines.length)]);
     }
@@ -167,7 +180,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
 
   useEffect(() => {
     const onBeforeUnload = (event: BeforeUnloadEvent) => {
-      setLunaMessage("?? ???? ?? ? ???!");
+      setLunaMessage("??! ???? ?? ? ?? ? ???!");
       event.preventDefault();
       event.returnValue = "";
     };
@@ -182,7 +195,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
       setCopyFeedback("copied");
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
       copyTimerRef.current = setTimeout(() => setCopyFeedback("idle"), 1500);
-      showToast("?? ??? ?????.", "success");
+      showToast("??? ?????.", "success");
     } catch {
       showToast("?? ??? ?????.", "error");
     }
@@ -196,20 +209,20 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
 
     const items = schedulesByDate[toDateKey(date)] ?? [];
     if (items.length === 0) {
-      setLunaMessage("??? ? ?? ??? ?????!");
+      setLunaMessage("???? ?? ???. ? ?? ???????");
     } else if (items.some((item) => item.type === "shared")) {
-      setLunaMessage("?? ?? ??? ??? ?? ?? ? ???? ??? ???! (?)");
+      setLunaMessage("???? ??? ?? ???. ?? ?? ????! (?)");
     }
   };
 
   const handleCreateSchedule = async () => {
     if (!selectedDate || !title.trim() || !time) {
-      showToast("??? ??? ??? ???.", "error");
+      showToast("?? ??? ?? ??? ???.", "error");
       return;
     }
     const date = toDateKey(selectedDate);
     if (hasDuplicateTime(date, time)) {
-      showToast("?? ???? ??? ??? ??? ? ???.", "error");
+      showToast("?? ??? ?? ?? ??? ???.", "error");
       return;
     }
 
@@ -223,7 +236,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
     setIsSaving(false);
 
     if (error) {
-      showToast("??? ?????. ???? ??? ??? ???.", "error");
+      showToast("??? ?????. ?? ? ?? ??? ???.", "error");
       return;
     }
     if (data) {
@@ -244,11 +257,11 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
 
   const handleUpdateSchedule = async () => {
     if (!editing || !title.trim() || !time) {
-      showToast("??? ??? ??? ???.", "error");
+      showToast("?? ??? ?? ??? ???.", "error");
       return;
     }
     if (hasDuplicateTime(editing.date, time, editing.id)) {
-      showToast("?? ???? ??? ??? ??? ? ???.", "error");
+      showToast("?? ??? ?? ?? ??? ???.", "error");
       return;
     }
 
@@ -291,7 +304,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
       <section className="mx-auto w-full max-w-6xl">
         <header className="mb-6 border-b border-[#e9e9e9] pb-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="inline-block text-xl tracking-[0.2em] md:text-2xl" style={{ fontFamily: "\"Zen Serif\", Georgia, \"Times New Roman\", serif" }}>
+            <p className="inline-block text-xl tracking-[0.2em] md:text-2xl">
               <span className="cursor-default border-b border-transparent transition-colors duration-300 hover:border-[#1e1e1e]">
                 iyyko | us
               </span>
@@ -301,7 +314,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
               onClick={handleCopyLink}
               className="min-w-[148px] rounded-xl border border-[#1e1e1e] bg-white px-3 py-2 text-xs tracking-[0.04em] transition-all sm:text-sm"
             >
-              {copyFeedback === "copied" ? "? ?? ??!" : "?? ?? ????"}
+              {copyFeedback === "copied" ? "? ?? ??!" : "?? ????"}
             </button>
           </div>
         </header>
@@ -315,7 +328,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
             >
               {"<"}
             </button>
-            <p className="text-lg tracking-[0.08em]" style={{ fontFamily: "\"Zen Serif\", Georgia, \"Times New Roman\", serif" }}>
+            <p className="text-lg tracking-[0.08em]">
               {currentMonth.getFullYear()}? {MONTH_LABELS[currentMonth.getMonth()]}
             </p>
             <button
@@ -392,9 +405,7 @@ export default function SchedulerApp({ groupId }: { groupId: string }) {
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/10 p-4">
           <div className="w-full max-w-md rounded-2xl border border-[#ececec] bg-white p-5 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm tracking-[0.08em] text-neutral-600" style={{ fontFamily: "\"Zen Serif\", Georgia, \"Times New Roman\", serif" }}>
-                {toDateKey(selectedDate)} ?? ??
-              </p>
+              <p className="text-sm tracking-[0.08em] text-neutral-600">{toDateKey(selectedDate)} ?? ??</p>
               <button type="button" onClick={() => setSelectedDate(null)} className="text-sm text-neutral-500">
                 ??
               </button>

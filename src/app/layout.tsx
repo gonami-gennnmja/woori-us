@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description: "A clean shared calendar for together and solo moments.",
     url: "https://iyyko.com/us",
     siteName: "iyyko | us",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: [{ url: "/us/opengraph-image", width: 1200, height: 630 }],
     locale: "ko_KR",
     type: "website",
   },
@@ -18,12 +18,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "iyyko | us",
     description: "A clean shared calendar for together and solo moments.",
-    images: ["/opengraph-image"],
+    images: ["/us/opengraph-image"],
   },
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/us/icon.svg",
+    shortcut: "/us/icon.svg",
+    apple: "/us/icon.svg",
   },
 };
 
@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

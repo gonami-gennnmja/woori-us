@@ -5,7 +5,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        zen: ["\"Zen Serif\"", "serif"],
+        sans: ["NotoSansKR", "Noto Sans KR", "Pretendard", "sans-serif"],
       },
       colors: {
         ink: "#1e1e1e",
